@@ -100,6 +100,12 @@ class ServerCommand : SimpleCommand {
             )
             return
         }
+        source.sendMessage(
+            Component.text("[Nexus]", NamedTextColor.DARK_PURPLE)
+                .append(Component.text(" >> ", NamedTextColor.GOLD))
+                .append(Component.text("Sending you to ", NamedTextColor.LIGHT_PURPLE))
+                .append(Component.text(targetName, NamedTextColor.WHITE))
+        )
         val result = source.createConnectionRequest(target.registeredServer).connect().get()
         if (!result.isSuccessful) {
             source.sendMessage(
