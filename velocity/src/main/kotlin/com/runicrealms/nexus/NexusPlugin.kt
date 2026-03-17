@@ -8,7 +8,7 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.proxy.ProxyServer
 import org.slf4j.Logger
 
-@Plugin(id = "Nexus", name = "Nexus", version = "0.1.0", description = "Realm Nexus Velocity")
+@Plugin(id = "nexus", name = "Nexus", version = "0.1.0", description = "Realm Nexus Velocity")
 class NexusPlugin @Inject constructor(private val proxy: ProxyServer, private val logger: Logger) {
 
     @Subscribe
