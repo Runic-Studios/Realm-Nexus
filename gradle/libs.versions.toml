@@ -1,0 +1,25 @@
+[versions]
+kotlin = "2.1.20"
+velocity = "3.4.0-SNAPSHOT"
+paper = "1.21.5-R0.1-SNAPSHOT"
+jackson = "2.18.3"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+ktfmt = "com.ncorti.ktfmt.gradle:0.21.0"
+shadow = "com.gradleup.shadow:8.3.6"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+guice = "com.google.inject:guice:7.0.0"
+velocity-api = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1"
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+
+# Plugin deps
+velagones-velocity = "com.runicrealms.velagones:velagones-velocity:0.1.7"
