@@ -27,6 +27,20 @@ class NexusCommand @Inject constructor(proxy: ProxyServer, plugin: NexusPlugin) 
         velagonesAPI = event.velagonesAPI
     }
 
+    override fun suggest(invocation: SimpleCommand.Invocation): List<String> {
+        val args = invocation.arguments()
+        if (args.size > 1) return emptyList()
+
+        val partial = if (args.isEmpty()) "" else args[0]!!
+        val canSeeDraining = invocation.source().hasPermission("runic.op")
+
+        return velagonesAPI.getGameServers()
+            .filter { !it.deactivated || canSeeDraining }
+            .map { it.registeredServer.serverInfo.name }
+            .filter { it.equals(partial, ignoreCase = true) || it.startsWith(partial, ignoreCase = true) }
+            .sorted()
+    }
+
     override fun execute(invocation: SimpleCommand.Invocation) {
         val source = invocation.source()
         val args = invocation.arguments()
@@ -42,6 +56,8 @@ class NexusCommand @Inject constructor(proxy: ProxyServer, plugin: NexusPlugin) 
                     Component.text("No servers are currently available.", NamedTextColor.GRAY)
                 )
             } else {
+                val currentServerName =
+                    (source as? Player)?.currentServer?.map { it.serverInfo.name }?.orElse(null)
                 for ((group, servers) in serversByGroup) {
                     source.sendMessage(
                         Component.text("  ", NamedTextColor.DARK_GRAY)
@@ -51,6 +67,9 @@ class NexusCommand @Inject constructor(proxy: ProxyServer, plugin: NexusPlugin) 
                         val name = server.registeredServer.serverInfo.name
                         val players = server.registeredServer.playersConnected.size
                         val capacity = server.capacity
+                        val capacityDisplay = if (capacity == Int.MAX_VALUE) "?" else "$capacity"
+                        val nameColor =
+                            if (name == currentServerName) NamedTextColor.GREEN else NamedTextColor.WHITE
                         val status =
                             if (server.deactivated) {
                                 Component.text(" (draining)", NamedTextColor.DARK_GRAY)
@@ -59,9 +78,9 @@ class NexusCommand @Inject constructor(proxy: ProxyServer, plugin: NexusPlugin) 
                             }
                         source.sendMessage(
                             Component.text("    ", NamedTextColor.DARK_GRAY)
-                                .append(Component.text(name, NamedTextColor.WHITE))
+                                .append(Component.text(name, nameColor))
                                 .append(Component.text(": ", NamedTextColor.GRAY))
-                                .append(Component.text("$players/$capacity", NamedTextColor.AQUA))
+                                .append(Component.text("$players/$capacityDisplay", NamedTextColor.AQUA))
                                 .append(status)
                         )
                     }
