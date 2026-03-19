@@ -1,16 +1,26 @@
 package com.runicrealms.nexus
 
+import com.google.inject.Inject
 import com.runicrealms.velagones.velocity.api.VelagonesAPI
 import com.runicrealms.velagones.velocity.api.event.VelagonesInitializeEvent
 import com.velocitypowered.api.command.SimpleCommand
 import com.velocitypowered.api.event.Subscribe
 import com.velocitypowered.api.proxy.Player
+import com.velocitypowered.api.proxy.ProxyServer
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 
-class ServerCommand : SimpleCommand {
+class NexusCommand @Inject constructor(proxy: ProxyServer, plugin: NexusPlugin) : SimpleCommand {
 
     private lateinit var velagonesAPI: VelagonesAPI
+
+    init {
+        proxy.commandManager.unregister("server")
+        val commandMeta =
+            proxy.commandManager.metaBuilder("nexus").aliases("server").plugin(plugin).build()
+        proxy.commandManager.register(commandMeta, this)
+        proxy.eventManager.register(plugin, this)
+    }
 
     @Subscribe
     fun onVelagonesInitialization(event: VelagonesInitializeEvent) {
@@ -59,7 +69,7 @@ class ServerCommand : SimpleCommand {
             }
             source.sendMessage(
                 Component.text("Use ", NamedTextColor.GRAY)
-                    .append(Component.text("/server <name>", NamedTextColor.WHITE))
+                    .append(Component.text("/nexus <name>", NamedTextColor.WHITE))
                     .append(Component.text(" to connect.", NamedTextColor.GRAY))
             )
             return
@@ -81,7 +91,7 @@ class ServerCommand : SimpleCommand {
                     .append(Component.text(targetName, NamedTextColor.WHITE))
                     .append(
                         Component.text(
-                            ". Use /server with no arguments to list available servers.",
+                            ". Use /nexus with no arguments to list available servers.",
                             NamedTextColor.GRAY,
                         )
                     )

@@ -15,5 +15,6 @@ class NexusModule(
         bind(ProxyServer::class.java).toInstance(proxy)
         bind(Logger::class.java).toInstance(logger)
         bind(NexusVelagonesListener::class.java).asEagerSingleton()
+        bind(NexusCommand::class.java).asEagerSingleton()
     }
 }
